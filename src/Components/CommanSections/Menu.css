@@ -1,0 +1,102 @@
+/* Basic Reset */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.menu-bar {
+    /* background-color: #fff; */
+    padding: 10px 20px;
+    /* box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
+}
+
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.menu-item {
+    position: relative;
+}
+
+.menu-item .MuiTypography-root {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1356c5;
+    text-decoration: none;
+}
+
+.menu-item:hover .MuiTypography-root {
+    color: #003085;
+}
+
+.submenu {
+    display: none; /* Hide submenu by default */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #f8f9fa;
+    display: none;
+    min-width: 200px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    width: 200px; /* Adjust the width of the submenu */
+}
+
+.menu-item:hover .submenu {
+    display: block;
+}
+
+.submenu-item {
+    position: relative;
+}
+
+.submenu-item .MuiTypography-root {
+    padding: 10px 20px;
+    color: #333;
+    font-size: 14px;
+}
+
+.submenu-item:hover .MuiTypography-root {
+    background-color: #e9ecef;
+    color: #003085;
+}
+
+.menu-item.active > .submenu {
+    display: block;
+}
+
+.submenu-item .submenu {
+    top: 0;
+    left: 100%;
+    display: none;
+}
+
+.submenu-item:hover .submenu {
+    display: block;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .menu {
+        flex-direction: column;
+    }
+
+    .menu-item {
+        text-align: center;
+    }
+
+    .submenu {
+        position: static;
+    }
+
+    .submenu-item .submenu {
+        position: static;
+    }
+}
