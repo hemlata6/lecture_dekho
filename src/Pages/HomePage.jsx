@@ -12,6 +12,7 @@ import HomeSection7 from '../Components/HomeSections/HomeSection7'
 import MenuBar from '../Components/CommanSections/MenuBar'
 import FacultySection from './FacultySection'
 import CourseSection3 from '../Components/CASections/CourseSection3'
+import MostSellingCourse from './MostSellingCourse'
 
 const HomePage = () => {
 
@@ -37,7 +38,8 @@ const HomePage = () => {
             <div>
                 <HomeSection1 />
                 {/* <HomeSection2 /> */}
-                <CourseSection3 />
+                {/* <CourseSection3 /> */}
+                <MostSellingCourse />
                 <HomeSection7 />
                 <HomeSection6 />
                <FacultySection />

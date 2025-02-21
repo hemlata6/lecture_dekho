@@ -20,6 +20,7 @@ import MultipleCourseCart from './Components/ExploreMoreSection/MultiplaCourseCa
 import NavBarTwo from './Components/CommanSections/NavBarTwo';
 import Footer from './Components/CommanSections/Footer';
 import HomeSection4 from './Components/HomeSections/HomeSection4';
+import ExploreAllCourses from './Pages/ExploreAllCourse';
 
 function App() {
 
@@ -51,6 +52,7 @@ function App() {
       <NavBarTwo downloadAppRef={downloadAppRef} />
       <Routes>
         <Route path='/' element={<HomePage />} />
+        <Route path='/Explore-all' element={<ExploreAllCourses />} />
         <Route path='/CA' element={<CALandingPage />} />
         <Route path='/CS' element={<CSLandingPage />} />
         <Route path='/CLAT' element={<CLATLandingPage />} />

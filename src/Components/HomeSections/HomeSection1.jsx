@@ -53,7 +53,7 @@ const HomeSection1 = () => {
           background: '#FDA41D',
           color: '#fff',
         },
-      }}>For Enquiry : 98765-43210 | 12345 67890</Button>
+      }}>For Enquiry : 9039946454</Button>
       {banners?.length > 0 && (
         <Grid container>
           <Grid item xs={12} sm={12} md={12} lg={12} sx={{ background: '#b7b2b221', py: [1, 3], width: "100%" }}>

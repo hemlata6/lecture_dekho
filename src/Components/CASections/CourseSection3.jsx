@@ -95,7 +95,8 @@ const CourseSection3 = () => {
         course.tags?.some(tag => tag.tag === "Trending Courses")
       );
 
-      setDomainData(caSubdomains);
+      // setDomainData(caSubdomains);
+      setDomainData(domainResponse?.domains);
       setCourses(caCourses);
     } catch (error) {
       console.error("Error fetching courses:", error);
@@ -140,14 +141,17 @@ const CourseSection3 = () => {
     setCourseExpandedDescriptions(true);
   };
 
+  console.log('domainData', domainData);
+  
+
   return (
     <div style={{ paddingLeft: isMobile ? '6rem' : '', paddingRight: isMobile ? '6rem' : '', paddingTop: isMobile ? '2rem' : '', paddingBottom: isMobile ? '2rem' : '' }} >
       <Grid sx={{ justifyContent: "center" }}>
-        <Grid item size={{ xs: 12, sm: 12, md: 12, lg: 12 }}>
-        <Typography variant="h6" fontWeight="bold" pb={2} sx={{textAlign: "center"}} >
-        Most Selling Courses
-                </Typography>
-    
+        <Grid item xs={12} sm={12} md={12} lg={12}>
+          <Typography variant="h6" fontWeight="bold" pb={2} sx={{ textAlign: "center" }} >
+            Most Selling Courses
+          </Typography>
+
           <Box sx={{ width: '100%' }}>
             <Stack
               direction={'row'}
@@ -260,13 +264,13 @@ const CourseSection3 = () => {
                             </Box>
                             <Box sx={{ position: "absolute", bottom: "0", left: 0, right: 0, padding: "0px 10px 0 10px" }}>
                               {/* <a href={`/course?courseId=${encodeURIComponent(item?.id)}`}> */}
-                                <Button
-                                  sx={{ background: "#FDA41D", color: "#fff", margin: "10px 0px 10px 0px", width: "100%", fontWeight: "bold", fontSize: "10px" }}
-                                  // onClick={() => handleEnrollNow(item)}
-                                  className='button-hover'
-                                >
-                                 Add to cart
-                                </Button>
+                              <Button
+                                sx={{ background: "#FDA41D", color: "#fff", margin: "10px 0px 10px 0px", width: "100%", fontWeight: "bold", fontSize: "10px" }}
+                                // onClick={() => handleEnrollNow(item)}
+                                className='button-hover'
+                              >
+                                Add to cart
+                              </Button>
                               {/* </a> */}
                             </Box>
                           </Box>
@@ -384,7 +388,7 @@ const CourseSection3 = () => {
               </TabPanel>
             ))}
             <Stack direction={'row'} spacing={2} py={2} justifyContent={'center'}>
-              {/* <a href={`/courseDetails?courseName=${encodeURIComponent('CA')}`}> */}
+              <a href={`Explore-all`}>
                 <Button
                   sx={{
                     background: '#FDA41D',
@@ -402,7 +406,7 @@ const CourseSection3 = () => {
                 >
                   Explore All
                 </Button>
-              {/* </a> */}
+              </a>
             </Stack>
           </Box>
         </Grid>

@@ -40,7 +40,7 @@ const Footer = () => {
     return (
         <div style={{ paddingLeft: isMobile ? '0rem' : '0rem', paddingRight: isMobile ? '0rem' : '0rem', paddingTop: '0rem', paddingBottom: '0rem' }}>
             <Grid container>
-                <Grid item xs={12} sm={12} md={12} lg={12} sx={{ background: '#452A00', py: [2, 4], textAlign: "center", borderTopLeftRadius: "50px", borderTopRightRadius: "50px" }}>
+                <Grid item xs={12} sm={12} md={12} lg={12} sx={{ background: '#452A00', py: [2, 4], px: [2, 2], textAlign: "center", borderTopLeftRadius: "50px", borderTopRightRadius: "50px" }}>
                     <img
                         alt=''
                         src={logo}

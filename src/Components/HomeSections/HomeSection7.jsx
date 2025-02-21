@@ -103,7 +103,7 @@ const HomeSection7 = () => {
                                     src={image1}
                                     style={{
                                         width: '100%',
-                                        maxWidth: '280px',
+                                        // maxWidth: '280px',
                                         borderRadius: '10px'
                                     }}
                                 />
@@ -116,7 +116,7 @@ const HomeSection7 = () => {
                                     src={image2}
                                     style={{
                                         width: '100%',
-                                        maxWidth: '280px',
+                                        // maxWidth: '280px',
                                         borderRadius: '10px'
                                     }}
                                 />
@@ -129,7 +129,7 @@ const HomeSection7 = () => {
                                     src={image3}
                                     style={{
                                         width: '100%',
-                                        maxWidth: '280px',
+                                        // maxWidth: '280px',
                                         borderRadius: '10px'
                                     }}
                                 />
@@ -142,7 +142,7 @@ const HomeSection7 = () => {
                                     src={image4}
                                     style={{
                                         width: '100%',
-                                        maxWidth: '280px',
+                                        // maxWidth: '280px',
                                         borderRadius: '10px'
                                     }}
                                 />

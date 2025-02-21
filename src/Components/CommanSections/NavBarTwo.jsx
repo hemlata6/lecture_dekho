@@ -512,6 +512,9 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
         navigate("/cart-courses")
       }
 
+    //   console.log('domainData', domainData);
+      
+
     return (
         <div style={{ paddingLeft: isMobile ? '6rem' : '0rem', paddingRight: isMobile ? '6rem' : '0rem', paddingTop: '0.5rem', paddingBottom: '0.5rem', background: '#fff' }}>
             <Box
@@ -534,7 +537,7 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                 <Box width={'100%'} display={'flex'} justifyContent={'flex-end'} alignItems={'center'} gap={6}>
                     <Stack direction={'row'} spacing={6}>
                         <Typography
-                            // onClick={(e) => handleNavBarClick(e, 'Home')}
+                            onClick={(e) => handleNavBarClick(e, 'Home')}
                             color='Black'
                             display={'flex'}
                             justifyContent={'start'}
@@ -550,7 +553,7 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                             {/* <img alt='' style={{ transform: anchorAbout ? 'rotate(180deg)' : 'rotate(0deg)' }} src={PolygonDown} /> */}
                         </Typography>
                         <Typography
-                            // onClick={handleClickOnlineCourse}
+                            // onClick={(e) => handleNavBarClick(e, 'Home')}
                             color='Black'
                             display={'flex'}
                             justifyContent={'start'}
@@ -562,9 +565,30 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                                 cursor: 'pointer'
                             }}
                         >
-                            Courses
-                            {/* <img alt='' style={{ transform: anchorElOnlineCourse ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Vector} /> */}
+                          Faculties
+                            {/* <img alt='' style={{ transform: anchorAbout ? 'rotate(180deg)' : 'rotate(0deg)' }} src={PolygonDown} /> */}
                         </Typography>
+                        {
+                            domainData?.length > 0 && domainData?.map((item, i)=>{
+                               return <Typography
+                                // onClick={handleClickOnlineCourse}
+                                color='Black'
+                                display={'flex'}
+                                justifyContent={'start'}
+                                alignItems={'center'}
+                                gap={1}
+                                fontSize={['12px', '14px']}
+                                fontWeight={'700'}
+                                sx={{
+                                    cursor: 'pointer'
+                                }}
+                            >
+                                {item?.name}
+                                {/* <img alt='' style={{ transform: anchorElOnlineCourse ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Vector} /> */}
+                            </Typography>
+})
+                        }
+                       
                         <Typography
                             // onClick={handleNavigateAboutUs}
                             color='Black'
@@ -583,7 +607,7 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                       
                     </Stack>
                     <Stack>
-                        <Badge badgeContent={cartItem.length} color="secondary" onClick={handleCartClick}>
+                        <Badge badgeContent={cartItem.length} color="secondary">
                             <AddShoppingCartIcon sx={{ cursor: 'pointer' }} />
                         </Badge>
                     </Stack>
