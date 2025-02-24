@@ -22,7 +22,7 @@ import { styled } from '@mui/material/styles';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import instId, { auth } from '../../constant/InstituteId';
 
-const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
+const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
 
     let cartData = localStorage.getItem('cartCourses');
     const isMobile = useMediaQuery("(min-width:600px)");
@@ -61,19 +61,21 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
     useImperativeHandle(ref, () => ({
 
         update() {
-          handleCartCount()
+            handleCartCount()
         }
-    
-      }));
-    
-      const handleCartCount = () => {
+
+    }));
+
+    const handleCartCount = () => {
         setrefresh(!refresh)
-      }
-      useEffect(() => {
+    }
+    useEffect(() => {
         if (cartData !== null && cartData !== undefined) {
-          setCartItem(cartData ? JSON.parse(cartData) : [])
+            setCartItem(cartData ? JSON.parse(cartData) : [])
+        } else {
+            setCartItem(cartData)
         }
-      }, [cartData, refresh])
+    }, [cartData, refresh])
 
     useEffect(() => {
         getAllCourses();
@@ -233,7 +235,7 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                         cursor: 'pointer'
                     }}
                 >
-                    <img onClick={(e) => handleNavBarClick(e, 'About Aurous')} style={{ cursor: 'pointer' }} width={'90%'} alt='' src={Logo} />
+                    <img onClick={(e) => handleNavBarClick(e, 'Home')} style={{ cursor: 'pointer' }} width={'90%'} alt='' src={Logo} />
                 </ListItem>
                 {/* <ListItem disablePadding>
                     <ListItemButton onClick={(e) => handleDownloadPdf(e, 'apre')}>
@@ -254,7 +256,7 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                     </ListItemButton>
                 </ListItem> */}
                 <ListItem disablePadding>
-                    <ListItemButton onClick={handleClickCourse} >
+                    <ListItemButton onClick={(e) => handleNavBarClick(e, 'Home')} >
                         <Typography
                             variant="body1" sx={{
                                 fontSize: '1.2rem',
@@ -267,21 +269,59 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                                 cursor: 'pointer',
                                 width: '100%'
                             }} >
-                            Courses
-                            {openCourse ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+                            Home
+
                         </Typography>
                     </ListItemButton>
                 </ListItem>
-                <Collapse in={openCourse} timeout="auto" unmountOnExit>
-                    <List component="div" disablePadding>
-                        <DomainMenu domainData={domainData} courses={courses} />
-                    </List>
-                </Collapse>
+                <ListItem disablePadding>
+                    <ListItemButton onClick={(e) => handleNavBarClick(e, 'Home')} >
+                        <Typography
+                            variant="body1" sx={{
+                                fontSize: '1.2rem',
+                                ':hover': {
+                                    color: '#DD4223'
+                                },
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                cursor: 'pointer',
+                                width: '100%'
+                            }} >
+                            Faculties
+
+                        </Typography>
+                    </ListItemButton>
+                </ListItem>
+                {
+                    domainData?.length > 0 && domainData?.map((item, i) => {
+                        return <ListItem disablePadding>
+                            <ListItemButton onClick={(e) => handleNavBarClick(e, 'Home')} >
+                                <Typography
+                                    variant="body1" sx={{
+                                        fontSize: '1.2rem',
+                                        ':hover': {
+                                            color: '#DD4223'
+                                        },
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center',
+                                        cursor: 'pointer',
+                                        width: '100%'
+                                    }} >
+                                    {item?.name}
+
+                                </Typography>
+                            </ListItemButton>
+                        </ListItem>
+                    })
+                }
+
                 <ListItem disablePadding>
                     <ListItemButton >
                         {/* <Badge badgeContent={<p style={{ fontSize: 10 }}>Soon</p>} color='error' > */}
                         <Typography
-                            onClick={handleNavigateAboutUs}
+                            // onClick={handleNavigateAboutUs}
                             variant="body1" sx={{
                                 fontSize: '1.2rem',
                                 ':hover': {
@@ -293,99 +333,10 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                                 cursor: 'pointer',
                                 width: '100%'
                             }} >
-                            About Us
+                            Contact Us
                         </Typography>
                         {/* </Badge> */}
                     </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton >
-                        {/* <Badge badgeContent={<p style={{ fontSize: 10 }}>Coming Soon</p>} color='warning' > */}
-                        <StyledBadge badgeContent={'Coming Soon'} color="secondary">
-                            <Typography
-                                onClick={handleOpenContactUs}
-                                variant="body1" sx={{
-                                    fontSize: '1.2rem',
-                                    ':hover': {
-                                        color: '#DD4223'
-                                    },
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                    width: '100%'
-                                }} >
-                                Student Zone
-                            </Typography>
-                        </StyledBadge>
-                        {/* </Badge> */}
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton>
-                        <StyledBadge badgeContent={'Coming Soon'} color="secondary">
-                            <Typography
-                                onClick={handleNavigateWeb}
-                                variant="body1" sx={{
-                                    fontSize: '1.2rem',
-                                    ':hover': {
-                                        color: '#DD4223'
-                                    },
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    alignItems: 'center',
-                                    cursor: 'pointer',
-                                    width: '100%'
-                                }} >
-                                Result
-                            </Typography>
-                        </StyledBadge>
-                    </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                    <ListItemButton onClick={handleOpenAnnouncement} >
-                        <Typography
-                            variant="body1" sx={{
-                                fontSize: '1.2rem',
-                                ':hover': {
-                                    color: '#DD4223'
-                                },
-                                display: 'flex',
-                                justifyContent: 'start',
-                                gap: '0.5rem',
-                                alignItems: 'center',
-                                cursor: 'pointer',
-                                width: '100%'
-                            }} >
-                            Resources
-                            {/* <img alt='' src={new_icon_blink1} /> */}
-                        </Typography>
-                    </ListItemButton>
-                </ListItem>
-                <ListItem>
-                    <Button
-                        onClick={handleScroll}
-                        sx={{
-                            color: '#fff',
-                            background: '#003085',
-                            // border: '1px solid #065290',
-                            ':hover': {
-                                background: '#003085',
-                            },
-                            fontWeight: '500',
-                            textTransform: 'none',
-                            borderRadius: '4px',
-                            paddingRight: '2rem',
-                            paddingLeft: '2rem',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            gap: 1
-                        }}
-                    >
-                        <PersonOutlineOutlinedIcon sx={{ fontSize: '18px' }} />
-                        Download Our App
-                    </Button>
                 </ListItem>
             </List>
         </Box>
@@ -510,10 +461,10 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
 
     const handleCartClick = () => {
         navigate("/cart-courses")
-      }
+    }
 
     //   console.log('domainData', domainData);
-      
+
 
     return (
         <div style={{ paddingLeft: isMobile ? '6rem' : '0rem', paddingRight: isMobile ? '6rem' : '0rem', paddingTop: '0.5rem', paddingBottom: '0.5rem', background: '#fff' }}>
@@ -565,30 +516,30 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                                 cursor: 'pointer'
                             }}
                         >
-                          Faculties
+                            Faculties
                             {/* <img alt='' style={{ transform: anchorAbout ? 'rotate(180deg)' : 'rotate(0deg)' }} src={PolygonDown} /> */}
                         </Typography>
                         {
-                            domainData?.length > 0 && domainData?.map((item, i)=>{
-                               return <Typography
-                                // onClick={handleClickOnlineCourse}
-                                color='Black'
-                                display={'flex'}
-                                justifyContent={'start'}
-                                alignItems={'center'}
-                                gap={1}
-                                fontSize={['12px', '14px']}
-                                fontWeight={'700'}
-                                sx={{
-                                    cursor: 'pointer'
-                                }}
-                            >
-                                {item?.name}
-                                {/* <img alt='' style={{ transform: anchorElOnlineCourse ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Vector} /> */}
-                            </Typography>
-})
+                            domainData?.length > 0 && domainData?.map((item, i) => {
+                                return <Typography
+                                    // onClick={handleClickOnlineCourse}
+                                    color='Black'
+                                    display={'flex'}
+                                    justifyContent={'start'}
+                                    alignItems={'center'}
+                                    gap={1}
+                                    fontSize={['12px', '14px']}
+                                    fontWeight={'700'}
+                                    sx={{
+                                        cursor: 'pointer'
+                                    }}
+                                >
+                                    {item?.name}
+                                    {/* <img alt='' style={{ transform: anchorElOnlineCourse ? 'rotate(180deg)' : 'rotate(0deg)' }} src={Vector} /> */}
+                                </Typography>
+                            })
                         }
-                       
+
                         <Typography
                             // onClick={handleNavigateAboutUs}
                             color='Black'
@@ -604,10 +555,10 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                         >
                             Contact Us
                         </Typography>
-                      
+
                     </Stack>
                     <Stack>
-                        <Badge badgeContent={cartItem.length} color="secondary">
+                        <Badge badgeContent={cartItem?.length} color="secondary" onClick={handleCartClick}>
                             <AddShoppingCartIcon sx={{ cursor: 'pointer' }} />
                         </Badge>
                     </Stack>
@@ -637,7 +588,7 @@ const NavBarTwo = forwardRef(({ref, downloadAppRef }) => {
                             padding: '5px'
                         }}
                         onClick={() => {
-                            window.location.href = 'tel:+919876554321';
+                            window.location.href = 'tel:+919039946454';
                         }}
                     >
                         <CallOutlinedIcon sx={{ fontWeight: 'bold', cursor: 'pointer' }} />

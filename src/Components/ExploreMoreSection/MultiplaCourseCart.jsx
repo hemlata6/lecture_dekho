@@ -42,7 +42,7 @@ const MultipleCourseCart = () => {
         setCartCourses(temp);
         localStorage.setItem('cartCourses', JSON.stringify(temp));
         if (temp?.length === 0) {
-            navigate(`/courseDetails?courseName=${encodeURIComponent('CA')}`)
+            navigate(-1)
         }
     }
 
@@ -101,7 +101,7 @@ const MultipleCourseCart = () => {
                                                     <p>
                                                         <p style={{ fontWeight: 'bold' }}>
                                                             <p style={{ marginBottom: 0 }}>
-                                                                Price Rs. {item?.finalPrice.toFixed(2)}
+                                                                Price Rs. {item?.finalPrice?.toFixed(2)}
                                                             </p>
                                                         </p>
                                                     </p>

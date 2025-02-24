@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Network from "../Netwrok";
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, ListItemText, MenuItem, Select, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, ListItemText, MenuItem, Select, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import instId from "../constant/InstituteId";
 import Endpoints from "../constant/endpoints";
 import parse from "html-react-parser";
+import SuggestedCourseDialog from "../Components/CommanSections/SuggestedCourseDialog";
+import { useNavigate } from "react-router-dom";
 
 const ExploreAllCourses = () => {
 
-      const isMobile = useMediaQuery("(min-width:600px)");
+    const navigate = useNavigate();
+    const isMobile = useMediaQuery("(min-width:600px)");
     const [examList, setExamList] = useState([]);
     const [stageList, setStageList] = useState([]);
     const [subjectList, setSubjectList] = useState([]);
@@ -28,9 +31,7 @@ const ExploreAllCourses = () => {
     const [finalAmountsss, setFinalAmountsss] = useState(0);
 
     // console.log('filteredCourses', filteredCourses);
-    console.log('cartCourses', cartCourses);
-
- 
+    // console.log('cartCourses', cartCourses);
 
 
     useEffect(() => {
@@ -57,41 +58,55 @@ const ExploreAllCourses = () => {
         if (selectStage?.id) {
             setSubjectList(selectStage?.child);
         }
-      
-      
+
+
     }, [selectExam, selectStage]);
 
     useEffect(() => {
-        let filtered = coursesList;      
-      
+        let filtered = coursesList;
+
         if (selectExam?.id) {
-            filtered = filtered.filter(course => 
+            filtered = filtered.filter(course =>
                 course.domain.some(domainItem => domainItem.id === selectExam.id)
             );
         }
-    
+
         // Filter by selected Stage
         if (selectStage?.id) {
-            filtered = filtered.filter(course => 
+            filtered = filtered.filter(course =>
                 course.domain.some(domainItem => domainItem.id === selectStage.id)
             );
         }
-    
+
         // Filter by selected Subjects (if any subjects are selected)
         if (selectedSubjects.length > 0) {
             filtered = filtered.filter(course =>
                 course.domain.find(subject => selectedSubjects.find(sel => sel.id === subject.id))
-              );
+            );
         }
         if (selectedFaculty.length > 0) {
             filtered = filtered.filter(course =>
                 course.tags.find(subject => selectedFaculty.find(sel => sel.id === subject.id))
-              );
+            );
         }
-    
+
         setFilteredCourses(filtered);
     }, [selectExam, selectStage, selectedSubjects, coursesList, selectedFaculty]);
-    
+
+    useEffect(() => {
+        const cartData = localStorage.getItem("cartCourses");
+        if (cartData) {
+            setCartCourses(JSON.parse(cartData));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (cartCourses.length > 0) {
+            localStorage.setItem("cartCourses", JSON.stringify(cartCourses));
+        } else {
+            localStorage.removeItem("cartCourses", JSON.stringify(cartCourses));
+        }
+    }, [cartCourses]);
 
     const getDomainList = async () => {
         try {
@@ -217,6 +232,12 @@ const ExploreAllCourses = () => {
         setFinalAmountsss(amount);
     };
 
+    const handleShowCart = () => {
+        navigate("/cart-courses")
+    }
+
+    // console.log('filteredCourses', filteredCourses);
+
 
     return (
 
@@ -264,11 +285,15 @@ const ExploreAllCourses = () => {
                                     </Select>
                                 </FormControl>
                             </Grid>
-                           
+
                         </Grid>
                     </Grid>
-                    <Grid item xs={12} sm={3} md={3} lg={3} sx={{ textAlign: 'end', mb: !isMobile ? 2 : ""}}>
-                        <Button sx={{ fontWeight: "bold", color: "#000", fontSize: "14px", border: "1px solid #80808038", textTransform: "initial", background: '#FDA41D', color: '#fff', padding: "10px", width:!isMobile ? "100%" : "50%" }} className='button-hover'> View cart</Button>
+                    <Grid item xs={12} sm={3} md={3} lg={3} sx={{ textAlign: 'end', mb: !isMobile ? 2 : "" }}>
+                        {
+                            cartCourses?.length > 0 && (
+                                <Button sx={{ fontWeight: "bold", color: "#000", fontSize: "14px", border: "1px solid #80808038", textTransform: "initial", background: '#FDA41D', color: '#fff', padding: "10px", width: !isMobile ? "100%" : "50%" }} onClick={handleShowCart} className='button-hover'> View cart</Button>
+                            )
+                        }
                     </Grid>
                 </Grid>
                 <Grid container spacing={2} sx={{ mb: 2 }}>
@@ -320,16 +345,21 @@ const ExploreAllCourses = () => {
                             {
                                 filteredCourses && filteredCourses.map((item, i) => {
                                     return <Grid item xs={12} sm={3} md={3} lg={3} sx={{ padding: "10px", textAlign: "center" }}>
-                                        <Box sx={{ borderRadius: "10px", position: "relative", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", height: "380px" }}>
+                                        <Box sx={{
+                                            borderRadius: "10px", position: "relative", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                                            //  height: "380px"
+                                        }}>
                                             <img
                                                 alt={item?.title}
                                                 src={Endpoints?.mediaBaseUrl + item?.logo}
-                                                style={{ width: "100%", height: "150px", maxHeight: "150px", minHeight: "150px", borderBottom: "1px solid #a9a9a92e", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} />
+                                                style={{ width: "100%", minHeight: "150px", borderBottom: "1px solid #a9a9a92e", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} />
                                             <Box sx={{ pb: 4, textAlign: "left", paddingLeft: "15px" }}>
-                                                <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 2, mb: 2, color: "black", fontSize: "15px" }}>
-                                                    {item?.title}
-
-                                                </Typography>
+                                                <Tooltip title={item?.title}>
+                                                    <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 2, mb: 2, color: "black", fontSize: "15px" }}>
+                                                        {item?.title?.split(" ").slice(0, 7).join(" ")}
+                                                        {item?.title?.split(" ").length > 7 && "..."}
+                                                    </Typography>
+                                                </Tooltip>
                                                 <Typography variant='p' className='desktop-view-discrip' sx={{ fontSize: "12px" }}>
                                                     {setCourseExpandedDescriptions === false ? truncateDescription(item?.description) : truncateDescription(item?.description)}
                                                     {item?.description.length > 100 && (
@@ -421,6 +451,27 @@ const ExploreAllCourses = () => {
                     </Grid>
                 </Grid>
             </Box>
+            <Dialog
+                open={suggestedCourseDialog}
+                onClose={() => setSuggestedCourseDialog(false)}
+                sx={{
+                    "& .MuiDialog-container": {
+                        "& .MuiPaper-root": {
+                            width: "100%",
+                            maxWidth: "500px",
+                        },
+                    },
+                }}
+            >
+                <SuggestedCourseDialog
+                    addedSuggestCourse={addedSuggestCourse}
+                    // courseId={course}
+                    suggestedCourseId={suggestedCourseId}
+                    handleClose={handleCloseSuggestedCourseDialog}
+                    onFinalAmountUpdate={handleFinalAmountUpdate}
+                    setCartCourses={setCartCourses} setFinalAmounts={setFinalAmounts}
+                />
+            </Dialog>
             <Dialog open={courseExpandedDescriptions} onClose={() => setCourseExpandedDescriptions(false)}>
 
                 <DialogContent dividers>

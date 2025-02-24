@@ -202,6 +202,8 @@ const CoursesDetail = ({ courseId }) => {
         }
     }, [course, publicCourses])
 
+    // console.log('publicCourses', publicCourses);    
+
     useEffect(() => {
         getAllCoursesPublic();
         getEmployee();
@@ -487,6 +489,8 @@ const CoursesDetail = ({ courseId }) => {
         setCourseExpandedDescriptions(true);
     };
 
+    // console.log('suggestedLength', suggestedLength);
+
 
     return (
         <div style={{ paddingLeft: isMobile ? '6rem' : '1rem', paddingRight: isMobile ? '6rem' : '1rem', paddingTop: isMobile ? '2rem' : '1rem', paddingBottom: isMobile ? '3rem' : '1rem' }}>
@@ -561,7 +565,7 @@ const CoursesDetail = ({ courseId }) => {
                     </Stack>
                 </Grid>
                 <Grid item xs={12} sm={8} md={8} lg={8}>
-                    <Box sx={{ flexGrow: 1, marginLeft: "25px" }}>
+                    <Box sx={{ flexGrow: 1, marginLeft: isMobile ? "25px" : "" }}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={8} md={8} lg={8}>
                                 <Stack direction={'column'} spacing={2}>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Network from "../Netwrok";
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, ListItemText, MenuItem, Select, Stack, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, ListItemText, MenuItem, Select, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import instId from "../constant/InstituteId";
 import Endpoints from "../constant/endpoints";
 import parse from "html-react-parser";
@@ -10,6 +10,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import SuggestedCourseDialog from "../Components/CommanSections/SuggestedCourseDialog";
 
 const MostSellingCourse = () => {
 
@@ -52,10 +53,7 @@ const MostSellingCourse = () => {
     const [finalAmountsss, setFinalAmountsss] = useState(0);
 
     // console.log('filteredCourses', filteredCourses);
-    console.log('cartCourses', cartCourses);
-
-
-
+    // console.log('cartCourses', cartCourses);
 
     useEffect(() => {
         getDomainList();
@@ -97,6 +95,20 @@ const MostSellingCourse = () => {
         setFilteredCourses(filtered);
     }, [selectExam, selectStage, selectedSubjects, coursesList, selectedFaculty]);
 
+    useEffect(() => {
+        const cartData = localStorage.getItem("cartCourses");
+        if (cartData) {
+            setCartCourses(JSON.parse(cartData));
+        }
+    }, []);
+
+    useEffect(() => {
+        if (cartCourses.length > 0) {
+            localStorage.setItem("cartCourses", JSON.stringify(cartCourses));
+        } else {
+            localStorage.removeItem("cartCourses", JSON.stringify(cartCourses));
+        }
+    }, [cartCourses]);
 
     const getDomainList = async () => {
         try {
@@ -394,15 +406,21 @@ const MostSellingCourse = () => {
                             {filteredCourses && filteredCourses.map((item, i) => (
                                 <SwiperSlide key={i}>
                                     <Grid item xs={12} sx={{ padding: "10px", textAlign: "center" }}>
-                                        <Box sx={{ borderRadius: "10px", position: "relative", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px", height: "380px" }}>
+                                        <Box sx={{
+                                            borderRadius: "10px", position: "relative", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
+                                            //  height: "380px" 
+                                        }}>
                                             <img
                                                 alt={item?.title}
                                                 src={Endpoints?.mediaBaseUrl + item?.logo}
-                                                style={{ width: "100%", height: "150px", maxHeight: "150px", minHeight: "150px", borderBottom: "1px solid #a9a9a92e", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} />
+                                                style={{ width: "100%", minHeight: "150px", borderBottom: "1px solid #a9a9a92e", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} />
                                             <Box sx={{ pb: 4, textAlign: "left", paddingLeft: "15px" }}>
-                                                <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 2, mb: 2, color: "black", fontSize: "15px" }}>
-                                                    {item?.title}
-                                                </Typography>
+                                                <Tooltip title={item?.title}>
+                                                    <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 2, mb: 2, color: "black", fontSize: "15px" }}>
+                                                        {item?.title?.split(" ").slice(0, 7).join(" ")}
+                                                        {item?.title?.split(" ").length > 7 && "..."}
+                                                    </Typography>
+                                                </Tooltip>
                                                 <Typography variant='p' className='desktop-view-discrip' sx={{ fontSize: "12px" }}>
                                                     {setCourseExpandedDescriptions === false ? truncateDescription(item?.description) : truncateDescription(item?.description)}
                                                     {item?.description.length > 100 && (
@@ -509,6 +527,27 @@ const MostSellingCourse = () => {
                     </Grid>
                 </Grid>
             </Box>
+            <Dialog
+                open={suggestedCourseDialog}
+                onClose={() => setSuggestedCourseDialog(false)}
+                sx={{
+                    "& .MuiDialog-container": {
+                        "& .MuiPaper-root": {
+                            width: "100%",
+                            maxWidth: "500px",
+                        },
+                    },
+                }}
+            >
+                <SuggestedCourseDialog
+                    addedSuggestCourse={addedSuggestCourse}
+                    // courseId={course}
+                    suggestedCourseId={suggestedCourseId}
+                    handleClose={handleCloseSuggestedCourseDialog}
+                    onFinalAmountUpdate={handleFinalAmountUpdate}
+                    setCartCourses={setCartCourses} setFinalAmounts={setFinalAmounts}
+                />
+            </Dialog>
             <Dialog open={courseExpandedDescriptions} onClose={() => setCourseExpandedDescriptions(false)}>
 
                 <DialogContent dividers>
