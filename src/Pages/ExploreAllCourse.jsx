@@ -136,10 +136,13 @@ const ExploreAllCourses = () => {
     const getAllCourses = async () => {
         try {
             const response = await Network.fetchCourses(instId);
-
-            let CourseList = response?.courses
-
-            setCoursesList(CourseList);
+            let templist = [];
+            response.courses.forEach((course) => {
+                if (course.active == true) {
+                    templist.push(course);
+                }
+            })
+            setCoursesList(templist);
         } catch (error) {
             console.error("Error fetching courses:", error);
         }
@@ -236,8 +239,13 @@ const ExploreAllCourses = () => {
         navigate("/cart-courses")
     }
 
-    // console.log('filteredCourses', filteredCourses);
+    const getLowestPrice = (coursePricing) => {
+        if (!coursePricing || coursePricing.length === 0) return null;
 
+        return coursePricing
+            .map(({ price, discount }) => price - (price * (discount / 100))) // Apply discount
+            .reduce((minPrice, currentPrice) => Math.min(minPrice, currentPrice), Infinity); // Get minimum price
+    };
 
     return (
 
@@ -291,7 +299,7 @@ const ExploreAllCourses = () => {
                     <Grid item xs={12} sm={3} md={3} lg={3} sx={{ textAlign: 'end', mb: !isMobile ? 2 : "" }}>
                         {
                             cartCourses?.length > 0 && (
-                                <Button sx={{ fontWeight: "bold", color: "#000", fontSize: "14px", border: "1px solid #80808038", textTransform: "initial", background: '#FDA41D', color: '#fff', padding: "10px", width: !isMobile ? "100%" : "50%" }} onClick={handleShowCart} className='button-hover'> View cart</Button>
+                                <Button sx={{ fontWeight: "bold", fontSize: "14px", border: "1px solid #80808038", textTransform: "initial", background: '#FDA41D', color: '#fff', padding: "10px", width: !isMobile ? "100%" : "50%" }} onClick={handleShowCart} className='button-hover'> View cart</Button>
                             )
                         }
                     </Grid>
@@ -344,6 +352,9 @@ const ExploreAllCourses = () => {
                         <Grid container sx={{ padding: 1, justifyContent: "start" }}>
                             {
                                 filteredCourses && filteredCourses.map((item, i) => {
+
+                                    let lowestPrice = getLowestPrice(item?.coursePricing);
+
                                     return <Grid item xs={12} sm={3} md={3} lg={3} sx={{ padding: "10px", textAlign: "center" }}>
                                         <Box sx={{
                                             borderRadius: "10px", position: "relative", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
@@ -400,7 +411,7 @@ const ExploreAllCourses = () => {
                                                                         component="span"
                                                                         sx={{ fontWeight: '500', background: 'rgba(255, 215, 0, 0.6)', padding: '2px 5px', borderRadius: '4px' }}
                                                                     >
-                                                                        ₹0
+                                                                        ₹{lowestPrice.toLocaleString("en-IN")}
                                                                     </Typography>
 
                                                                 }
