@@ -1,6 +1,8 @@
 import { Box, Button, Grid, Stack, Typography, useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 import Network from "../Netwrok";
 import employeesss from '../../src/Images/employee.svg'
 import instId from "../constant/InstituteId";
