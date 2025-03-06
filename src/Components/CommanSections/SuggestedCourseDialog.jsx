@@ -261,14 +261,47 @@ const SuggestedCourseDialog = ({ addedSuggestCourse, handleClose, onFinalAmountU
         return Array.from(variationsSet);
     };
 
+    function getDuration(milli) {
+        let minutes = Math.floor(milli / 60000);
+        let hours = Math.round(minutes / 60);
+        let days = Math.round(hours / 24);
+
+        return (
+            (days && { value: days, unit: 'days' }) ||
+            (hours && { value: hours, unit: 'hours' }) ||
+            { value: minutes, unit: 'minutes' }
+        )
+    };
+
+    function convertMilliseconds(ms) {
+        let seconds = Math.floor(ms / 1000);
+        let minutes = Math.floor(seconds / 60);
+        let hours = Math.floor(minutes / 60);
+        let days = Math.floor(hours / 24);
+
+        let years = Math.floor(days / 365);
+        let remainingDays = days % 365;
+        let months = Math.floor(remainingDays / 30); // Approximate
+        let finalDays = remainingDays % 30;
+
+        let result = [];
+
+        if (years > 0) result.push(`${years} years`);
+        if (months > 0 && months !== 9) result.push(`${months} months`);
+        if (finalDays > 0) result.push(`${finalDays} days`);
+
+        return result.join(', ') || '0 days';
+    }
+
     const formatMilliseconds = (ms) => {
         if (!ms) return "N/A";
 
         const years = Math.floor(ms / (1000 * 60 * 60 * 24 * 365));
         const months = Math.floor((ms % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
         const days = Math.floor((ms % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+        var tDuration = getDuration(ms);
 
-        return `${years}y ${months}m ${days}d`;
+        return `${convertMilliseconds(ms)} or ${tDuration.value} ${tDuration.unit}`;
     };
 
     const formatTimestamp = (timestamp) => {
@@ -467,10 +500,10 @@ const SuggestedCourseDialog = ({ addedSuggestCourse, handleClose, onFinalAmountU
                                             }}
                                         >
                                             <FormControl fullWidth sx={{ mb: 2 }}>
-                                                <InputLabel id="demo-simple-select-label">{selectedValidityType ? selectedValidityType : "Validity"} Date</InputLabel>
+                                                <InputLabel id="demo-simple-select-label">{selectedValidityType === "validity" ? "Validity" : selectedValidityType === "lifetime" ? selectedValidityType : "Validity"}</InputLabel>
                                                 <p style={{ margin: 0 }}></p>
                                                 <Select
-                                                    label={selectedValidityType ? `${selectedValidityType} Date` : "Validity Date"}
+                                                    label={selectedValidityType === "validity" ? "Validity" : selectedValidityType === "lifetime" ? `${selectedValidityType} Date` : "Validity"}
                                                     // multiple
                                                     fullWidth
                                                     variant="outlined"
@@ -482,11 +515,13 @@ const SuggestedCourseDialog = ({ addedSuggestCourse, handleClose, onFinalAmountU
                                                 //     maxWidth: '300px'
                                                 // }}
                                                 >
-                                                    {validityDateList?.map((duration) => (
-                                                        <MenuItem key={duration} value={duration}>
-                                                            <ListItemText primary={duration} />
-                                                        </MenuItem>
-                                                    ))}
+                                                    {validityDateList?.map((duration) => {
+                                                        return (
+                                                            <MenuItem key={duration} value={duration}>
+                                                                <ListItemText primary={duration} />
+                                                            </MenuItem>
+                                                        )
+                                                    })}
                                                 </Select>
                                             </FormControl>
                                         </div>

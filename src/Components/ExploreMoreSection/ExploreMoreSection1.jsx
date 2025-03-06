@@ -209,7 +209,7 @@ const ExploreMoreSection1 = () => {
                         </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={2} md={2} lg={2} sx={{ paddingLeft: !isMobile ? "0px !important" : "", paddingTop: !isMobile ? "0px !important" : "" }}>
-                        {cartCourses?.length > 0 && (<Box sx={{ width: "100%" }}><Button disabled={cartCourses?.length > 0 ? false : true} onClick={handleShowCart} sx={{ fontWeight: "bold", color: "#000", fontSize: "14px", border: "1px solid #80808038", textTransform: "initial", background: '#1356C5', color: '#fff', padding: "14px 11px", width: "100%" }} className='button-hover'><ArrowForwardIcon />&nbsp; Go to Cart Details</Button></Box>)}
+                        {cartCourses?.length > 0 && (<Box sx={{ width: "100%" }}><Button disabled={cartCourses?.length > 0 ? false : true} onClick={handleShowCart} sx={{ fontWeight: "bold", fontSize: "14px", border: "1px solid #80808038", textTransform: "initial", background: '#1356C5', color: '#fff', padding: "14px 11px", width: "100%" }} className='button-hover'><ArrowForwardIcon />&nbsp; Go to Cart Details</Button></Box>)}
                     </Grid>
                     <Grid container spacing={2} justifyContent="center" sx={{ marginTop: "20px" }}>
                         {Object.keys(courseByTagName).length > 0 ? (
