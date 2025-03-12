@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import Network from "../Netwrok";
-import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, ListItemText, MenuItem, Select, Tooltip, Typography, useMediaQuery } from "@mui/material";
+import { Box, Button, Checkbox, Dialog, DialogActions, DialogContent, FormControl, FormControlLabel, Grid, InputLabel, ListItemText, MenuItem, Select, Stack, Tooltip, Typography, useMediaQuery } from "@mui/material";
 import instId from "../constant/InstituteId";
 import Endpoints from "../constant/endpoints";
 import parse from "html-react-parser";
 import SuggestedCourseDialog from "../Components/CommanSections/SuggestedCourseDialog";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ExploreAllCourses = () => {
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const tagData = location?.state
     const isMobile = useMediaQuery("(min-width:600px)");
     const [examList, setExamList] = useState([]);
     const [stageList, setStageList] = useState([]);
@@ -30,9 +32,14 @@ const ExploreAllCourses = () => {
     const [finalAmounts, setFinalAmounts] = useState(0);
     const [finalAmountsss, setFinalAmountsss] = useState(0);
 
-    // console.log('filteredCourses', filteredCourses);
-    // console.log('cartCourses', cartCourses);
-
+    useEffect(() => {
+        if (tagData) {
+            // Ensure it's an array
+            setSelectedFaculty(Array.isArray(tagData) ? tagData : [tagData]);
+        } else {
+            setSelectedFaculty([]);
+        }
+    }, [tagData]);
 
     useEffect(() => {
         getDomainList();
@@ -126,6 +133,7 @@ const ExploreAllCourses = () => {
     const getTagsListApi = async () => {
         try {
             const response = await Network.getTagsListApi(instId);
+            // const list = response?.tags.filter((item) => item?.availablePublic === true);
             const list = response?.tags
             setTagsLists(list);
         } catch (error) {
@@ -345,7 +353,6 @@ const ExploreAllCourses = () => {
                                     />
                                 ))
                             }
-
                         </Box>
                     </Grid>
                     <Grid item xs={12} sm={9} md={9} lg={9}>
@@ -355,15 +362,22 @@ const ExploreAllCourses = () => {
 
                                     let lowestPrice = getLowestPrice(item?.coursePricing);
 
-                                    return <Grid item xs={12} sm={3} md={3} lg={3} sx={{ padding: "10px", textAlign: "center" }}>
+                                    return <Grid key={i} item xs={12} sm={3} md={3} lg={3} sx={{ padding: "10px", textAlign: "center" }}>
                                         <Box sx={{
                                             borderRadius: "10px", position: "relative", boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px",
                                             //  height: "380px"
                                         }}>
-                                            <img
-                                                alt={item?.title}
-                                                src={Endpoints?.mediaBaseUrl + item?.logo}
-                                                style={{ width: "100%", minHeight: "150px", borderBottom: "1px solid #a9a9a92e", borderTopLeftRadius: "8px", borderTopRightRadius: "8px" }} />
+                                            <Stack
+                                                direction={'row'}
+                                                sx={{
+                                                    padding: '0.5rem'
+                                                }}
+                                            >
+                                                <img
+                                                    alt={item?.title}
+                                                    src={Endpoints?.mediaBaseUrl + item?.logo}
+                                                    style={{ width: "100%", minHeight: "150px", borderBottom: "1px solid #a9a9a92e", borderRadius: "8px" }} />
+                                            </Stack>
                                             <Box sx={{ pb: 4, textAlign: "left", paddingLeft: "15px" }}>
                                                 <Tooltip title={item?.title}>
                                                     <Typography variant='h5' fontWeight={"bold"} sx={{ mt: 2, mb: 2, color: "black", fontSize: "15px" }}>
@@ -432,7 +446,7 @@ const ExploreAllCourses = () => {
                                                     <Grid item xs={6} sm={6} md={6} lg={6}>
                                                         <a href={`/course?courseId=${encodeURIComponent(item?.id)}`}>
                                                             <Button
-                                                                sx={{ background: "#3300FD", color: "#fff", margin: "10px 0px 10px 0px", width: "100%", fontWeight: "bold", fontSize: "10px", padding: "6px" }}
+                                                                sx={{ background: "#3300FD", color: "#fff", margin: "10px 0px 10px 0px", width: "100%", fontWeight: "bold", fontSize: "10px", padding: "6px", textTransform: "none" }}
                                                                 // onClick={() => handleEnrollNow(item)}
                                                                 className='button-hover'
                                                             >
@@ -443,7 +457,7 @@ const ExploreAllCourses = () => {
                                                     <Grid item xs={6} sm={6} md={6} lg={6}>
                                                         <Button
                                                             onClick={() => handleAddtoCart(item)}
-                                                            sx={{ background: "#FDA41D", color: "#fff", margin: "10px 0px 10px 0px", width: "100%", fontWeight: "bold", fontSize: "10px" }}
+                                                            sx={{ background: "#FDA41D", color: "#fff", margin: "10px 0px 10px 0px", width: "100%", fontWeight: "bold", fontSize: "10px", textTransform: 'none' }}
                                                             className='addtocart-hover'
                                                         >
                                                             {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to Cart"}

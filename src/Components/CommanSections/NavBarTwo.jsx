@@ -1,4 +1,4 @@
-import { useMediaQuery, Box, Button, Typography, Drawer, List, ListItem, ListItemButton, Collapse, IconButton, MenuItem, Avatar, Menu, Badge, ListItemText, Chip, Dialog, Stack, Popover, Tooltip } from '@mui/material';
+import { useMediaQuery, Box, Typography, Drawer, List, ListItem, ListItemButton, Collapse, IconButton, MenuItem, Avatar, Menu, Badge, ListItemText, Chip, Dialog, Stack, Popover, Tooltip } from '@mui/material';
 import React, { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 // import Logo from './Images/logo.svg'
 import CloseIcon from '@mui/icons-material/Close';
@@ -31,32 +31,37 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
     const [anchorElOnlineCourse, setAnchorElOnlineCourse] = useState(null);
     const [anchorEScholarship, setanchorEScholarship] = useState(null);
     const [anchorAbout, setanchorAbout] = useState(null);
-    const [anchorEl, setAnchorEl] = useState(null);
+    // const [anchorEl, setAnchorEl] = useState(null);
     const openOnlineCourse = Boolean(anchorElOnlineCourse);
     const openSholarship = Boolean(anchorEScholarship);
     const openAbout = Boolean(anchorAbout);
     const [openLeft, setOpenLeft] = useState(false);
-    const [openScholarshipExp, setOpenScholarshipExp] = useState(false);
-    const [openAboutUs, setOpenAboutUs] = useState(false);
-    const [openCourse, setOpenCourse] = React.useState(false);
-    const [openAnnouncement, setOpenAnnouncement] = React.useState(false);
-    const [openContactUs, setOpenContactUs] = React.useState(false);
+    // const [openScholarshipExp, setOpenScholarshipExp] = useState(false);
+    // const [openAboutUs, setOpenAboutUs] = useState(false);
+    // const [openCourse, setOpenCourse] = React.useState(false);
+    // const [openAnnouncement, setOpenAnnouncement] = React.useState(false);
+    const [openFaculty, setOpenFaculty] = React.useState(false);
     const [courses, setCourses] = useState([]);
-    const [testSeries, setTestSeries] = useState([]);
+    // const [testSeries, setTestSeries] = useState([]);
     const [isSticky, setIsSticky] = useState(false);
-    const [anncouncementData, setAnncouncementData] = useState([]);
+    // const [anncouncementData, setAnncouncementData] = useState([]);
     const [domainData, setDomainData] = useState([]);
     const [cartItem, setCartItem] = useState([])
     const [refresh, setrefresh] = useState(false)
+    // const [anchorElOnlineCourse, setAnchorElOnlineCourse] = useState(null);
+    const [anchorElSubMenu, setAnchorElSubMenu] = useState(null);
+    // const [openOnlineCourse, setOpenOnlineCourse] = useState(false);
+    // const [subDomains, setSubDomains] = useState([]);
+    const [tagsLists, setTagsLists] = useState([]);
 
-    const StyledBadge = styled(Badge)(({ theme }) => ({
-        '& .MuiBadge-badge': {
-            right: isMobile ? -0 : -40,
-            top: isMobile ? -10 : 5,
-            border: `2px solid ${theme.palette.background.paper}`,
-            padding: '0 4px',
-        },
-    }));
+    // const StyledBadge = styled(Badge)(({ theme }) => ({
+    //     '& .MuiBadge-badge': {
+    //         right: isMobile ? -0 : -40,
+    //         top: isMobile ? -10 : 5,
+    //         border: `2px solid ${theme.palette.background.paper}`,
+    //         padding: '0 4px',
+    //     },
+    // }));
 
     useImperativeHandle(ref, () => ({
 
@@ -80,35 +85,58 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
     useEffect(() => {
         getAllCourses();
         getDomainList();
-        getAllAnnouncement();
+        // getAllAnnouncement();
+        getTagsListApi();
     }, []);
 
     const handleScroll = () => {
         downloadAppRef.current?.scrollIntoView({ behavior: "smooth" });
+        handleOpenNavMen2Close();
     };
 
-    const handleClickCourse = (event) => {
-        setOpenCourse((prevOpen) => !prevOpen);
-        event.stopPropagation();
-    };
-    const handleOpenContactUs = (event) => {
-        setOpenContactUs(true);
-        event.stopPropagation();
-    };
+    useEffect(() => {
+        // getInstituteDetail();
+        const handleScroll = () => {
+            const scrollTop = window.pageYOffset;
+            if (scrollTop > 0) {
+                setIsSticky(true);
+            } else {
+                setIsSticky(false);
+            }
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
 
-    const handleBuyCourse = (item) => {
-        // navigate(`/courseDetails/${item?.id}`);
-        // navigate(`https://course.classiolabs.com/course/${item?.id}`);
-        const url = `https://course.classiolabs.com/course/${item?.id}`
-        window.open(url, '_blank', 'noreferrer');
-        handleClose();
-        handleCloseOnlineCourse();
-    };
 
-    const getAllAnnouncement = async () => {
-        const response = await Network.fetchAnnouncementUrl(instId);
-        setAnncouncementData(response?.announcement);
-    };
+    // const handleClickCourse = (event) => {
+    //     setOpenCourse((prevOpen) => !prevOpen);
+    //     event.stopPropagation();
+    // };
+    // const handleopenFaculty = (event) => {
+    //     setOpenFaculty(true);
+    //     event.stopPropagation();
+    // };
+
+    // const handleBuyCourse = (item) => {
+    //     // navigate(`/courseDetails/${item?.id}`);
+    //     // navigate(`https://course.classiolabs.com/course/${item?.id}`);
+    //     const url = `https://course.classiolabs.com/course/${item?.id}`
+    //     window.open(url, '_blank', 'noreferrer');
+    //     handleClose();
+    //     handleCloseOnlineCourse();
+    // };
+
+    // const getAllAnnouncement = async () => {
+    //     try {
+    //         const response = await Network.fetchAnnouncementUrl(instId);
+    //         setAnncouncementData(response?.announcement);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // };
 
     const getDomainList = async () => {
         try {
@@ -151,9 +179,9 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
     };
 
 
-    const handleClickOnlineCourse = (event) => {
-        setAnchorElOnlineCourse(event.currentTarget);
-    };
+    // const handleClickOnlineCourse = (event) => {
+    //     setAnchorElOnlineCourse(event.currentTarget);
+    // };
 
     const handleClickAboutUs = (event) => {
         setanchorAbout(event.currentTarget);
@@ -166,22 +194,23 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
         setanchorEScholarship(null);
     };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    // const handleClose = () => {
+    //     setAnchorEl(null);
+    // };
 
-    const handleCloseOnlineCourse = () => {
-        setAnchorElOnlineCourse(null);
-    };
+    // const handleCloseOnlineCourse = () => {
+    //     setAnchorElOnlineCourse(null);
+    // };
 
     const toggleDrawer = (newOpen) => () => {
         setOpenLeft(newOpen);
     };
 
-    const handleNavigateWeb = () => {
-        const url = 'https://amber-jordan-31.tiiny.site'
-        window.open(url, '_blank', 'noreferrer');
-    };
+    // const handleNavigateWeb = () => {
+    //     const url = 'https://amber-jordan-31.tiiny.site'
+    //     window.open(url, '_blank', 'noreferrer');
+    // };
+
     const handleNavigatePragyan = () => {
         const url = 'https://pragyan.classiolabs.com/'
         window.open(url, '_blank', 'noreferrer');
@@ -195,7 +224,15 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
         setSelectedCourse(course);
         if (course === 'Home') {
             navigate('/');
-        };
+        } else if (course === 'CA') {
+            navigate('/CA');
+        } else if (course === 'CS') {
+            navigate('/CS');
+        } else if (course === 'CMA') {
+            navigate('/CLAT');
+        } else if (course === 'CFA') {
+            navigate('/IPMAT-CUET');
+        }
     };
 
     const handleOpenNavMen2Close = () => {
@@ -206,23 +243,36 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
         setOpenLeft(true);
     };
 
-    const handlePlayStore = () => {
-        const section5Element = document.querySelector('.home-section-5');
-        if (section5Element) {
-            section5Element.scrollIntoView({ behavior: 'smooth' });
-        }
-    };
+    // const handlePlayStore = () => {
+    //     const section5Element = document.querySelector('.home-section-5');
+    //     if (section5Element) {
+    //         section5Element.scrollIntoView({ behavior: 'smooth' });
+    //     }
+    // };
 
-    const handleOpenAnnouncement = () => {
-        setOpenAnnouncement(true);
-    };
+    // const handleOpenAnnouncement = () => {
+    //     setOpenAnnouncement(true);
+    // };
 
     const handleNavigateAboutUs = () => {
         navigate('/about');
     };
 
-    // console.log('domainData', domainData, courses);
+    const handlClickFacultyExp = (e) => {
+        e.preventDefault()
+        setOpenFaculty(!openFaculty);
+    };
 
+    const getTagsListApi = async () => {
+        try {
+            const response = await Network.getTagsListApi(instId);
+            const list = response?.tags
+            // const list = response?.tags.filter((item) => item?.availablePublic === true);
+            setTagsLists(list);
+        } catch (error) {
+            console.error("Error fetching domains:", error);
+        }
+    };
 
     const DrawerList = (
         <Box sx={{ width: 320 }} role="presentation">
@@ -237,24 +287,6 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                 >
                     <img onClick={(e) => handleNavBarClick(e, 'Home')} style={{ cursor: 'pointer' }} width={'90%'} alt='' src={Logo} />
                 </ListItem>
-                {/* <ListItem disablePadding>
-                    <ListItemButton onClick={(e) => handleDownloadPdf(e, 'apre')}>
-                        <Typography
-                            variant="body1" sx={{
-                                fontSize: '1.2rem',
-                                ':hover': {
-                                    color: '#DD4223'
-                                },
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                alignItems: 'center',
-                                cursor: 'pointer',
-                                width: '100%'
-                            }} >
-                            Scholarship 
-                        </Typography>
-                    </ListItemButton>
-                </ListItem> */}
                 <ListItem disablePadding>
                     <ListItemButton onClick={(e) => handleNavBarClick(e, 'Home')} >
                         <Typography
@@ -270,12 +302,11 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                                 width: '100%'
                             }} >
                             Home
-
                         </Typography>
                     </ListItemButton>
                 </ListItem>
                 <ListItem disablePadding>
-                    <ListItemButton onClick={(e) => handleNavBarClick(e, 'Home')} >
+                    <ListItemButton onClick={handlClickFacultyExp} >
                         <Typography
                             variant="body1" sx={{
                                 fontSize: '1.2rem',
@@ -288,15 +319,36 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                                 cursor: 'pointer',
                                 width: '100%'
                             }} >
-                            Faculties
-
+                            Faculty
                         </Typography>
                     </ListItemButton>
                 </ListItem>
+                <Collapse in={openFaculty}>
+                    <List component="div" disablePadding>
+                        {
+                            tagsLists?.length > 0 && tagsLists?.map((item, i) => {
+                                return (
+                                    <ListItemButton
+                                        key={i}
+                                        sx={{ fontSize: '15px' }}
+                                        onClick={(e) => {
+                                            navigate('/Explore-all', { state: item });
+                                            handleOpenNavMen2Close()
+                                        }}
+                                    >
+                                        {item?.tag}
+                                    </ListItemButton>
+                                )
+                            })
+                        }
+                    </List>
+                </Collapse>
                 {
                     domainData?.length > 0 && domainData?.map((item, i) => {
                         return <ListItem disablePadding>
-                            <ListItemButton onClick={(e) => handleNavBarClick(e, 'Home')} >
+                            <ListItemButton
+                                onClick={(e) => handleNavBarClick(e, item?.name)}
+                            >
                                 <Typography
                                     variant="body1" sx={{
                                         fontSize: '1.2rem',
@@ -321,7 +373,7 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                     <ListItemButton >
                         {/* <Badge badgeContent={<p style={{ fontSize: 10 }}>Soon</p>} color='error' > */}
                         <Typography
-                            // onClick={handleNavigateAboutUs}
+                            onClick={handleScroll}
                             variant="body1" sx={{
                                 fontSize: '1.2rem',
                                 ':hover': {
@@ -338,44 +390,46 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                         {/* </Badge> */}
                     </ListItemButton>
                 </ListItem>
+                {/* <Collapse in={openFaculty}>
+                    <List component="div" disablePadding>
+                        <ListItemButton
+                            sx={{ fontSize: '15px' }}
+                            onClick={() => {
+                                window.location.href = 'tel:+919039946454';
+                            }}
+                        >
+                            903 994 6454
+                        </ListItemButton>
+                        <a href='mailto:teamlecturedekho@gmail.com'>
+                            <ListItemButton
+                                sx={{ fontSize: '15px' }}
+                            >
+                                teamlecturedekho@gmail.com
+                            </ListItemButton>
+                        </a>
+                    </List>
+                </Collapse> */}
             </List>
         </Box>
     );
 
-    const handleDownloadPdf = (e, value) => {
-        if (value === 'pragyan') {
-            handleNavigatePragyan();
-        } else if (value === 'apre') {
-            handleNavigateAPRE();
-        } else if (value === 'aboutUs') {
-            handleNavigateAboutUs();
-        } else if (value === 'ourTeam') {
-            handleNavigateOurTeam();
-        }
-    };
-
-    useEffect(() => {
-        // getInstituteDetail();
-        const handleScroll = () => {
-            const scrollTop = window.pageYOffset;
-            if (scrollTop > 0) {
-                setIsSticky(true);
-            } else {
-                setIsSticky(false);
-            }
-        };
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
+    // const handleDownloadPdf = (e, value) => {
+    //     if (value === 'pragyan') {
+    //         handleNavigatePragyan();
+    //     } else if (value === 'apre') {
+    //         handleNavigateAPRE();
+    //     } else if (value === 'aboutUs') {
+    //         handleNavigateAboutUs();
+    //     } else if (value === 'ourTeam') {
+    //         handleNavigateOurTeam();
+    //     }
+    // };
 
     const handleNavigateOurTeam = () => {
         navigate('/ourTeam');
     };
 
-    const [selectedDomain, setSelectedDomain] = useState(null);
+    // const [selectedDomain, setSelectedDomain] = useState(null);
     // const [anchorElSubMenu, setAnchorElSubMenu] = useState(null);
     // const [subDomains, setSubDomains] = useState([]);
 
@@ -394,77 +448,69 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
     //     setSubDomains([]);
     // };
 
-    // const [anchorElOnlineCourse, setAnchorElOnlineCourse] = useState(null);
-    const [anchorElSubMenu, setAnchorElSubMenu] = useState(null);
-    // const [openOnlineCourse, setOpenOnlineCourse] = useState(false);
-    const [subDomains, setSubDomains] = useState([]);
-
-    const handleDomainClick = (event, domain) => {
-        if (domain.child?.length > 0) {
-            setAnchorElSubMenu(event.currentTarget);
-            setSubDomains(domain.child);
-        } else {
-            setAnchorElSubMenu(null);
-            // Logic for handling domain without children
-        }
-    };
+    // const handleDomainClick = (event, domain) => {
+    //     if (domain.child?.length > 0) {
+    //         setAnchorElSubMenu(event.currentTarget);
+    //         setSubDomains(domain.child);
+    //     } else {
+    //         setAnchorElSubMenu(null);
+    //         // Logic for handling domain without children
+    //     }
+    // };
 
     const handleCloseSubMenu = () => {
         setAnchorElSubMenu(null);
     };
 
-    const handleOpenMenu = (event) => {
-        setAnchorElOnlineCourse(event.currentTarget);
-        // setOpenOnlineCourse(true);
-    };
+    // const handleOpenMenu = (event) => {
+    //     setAnchorElOnlineCourse(event.currentTarget);
+    //     // setOpenOnlineCourse(true);
+    // };
 
-    const handleCloseMenu = () => {
-        setAnchorElOnlineCourse(null);
-        // setOpenOnlineCourse(false);
-        handleCloseSubMenu();
-    };
+    // const handleCloseMenu = () => {
+    //     setAnchorElOnlineCourse(null);
+    //     // setOpenOnlineCourse(false);
+    //     handleCloseSubMenu();
+    // };
 
-    const renderDomainMenu = (domains, handleDomainClick) => {
-        return domains?.map((domain) => (
-            <MenuItem
-                key={domain.id}
-                onClick={(event) => handleDomainClick(event, domain)}
-                sx={{ fontSize: '14px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}
-            >
-                {domain.name}
-                {domain.child?.length > 0 && <ArrowRightIcon />}
-                {domain.child?.length > 0 && (
-                    <Popover
-                        open={Boolean(anchorElSubMenu) && subDomains === domain.child}
-                        anchorEl={anchorElSubMenu}
-                        onClose={handleCloseSubMenu}
-                        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
-                        PaperProps={{
-                            sx: {
-                                mt: 1,
-                                p: 0,
-                            },
-                        }}
-                    >
-                        {renderDomainMenu(domain.child, handleDomainClick)}
-                    </Popover>
-                )}
-            </MenuItem>
-        ));
-    };
+    // const renderDomainMenu = (domains, handleDomainClick) => {
+    //     return domains?.map((domain) => (
+    //         <MenuItem
+    //             key={domain.id}
+    //             onClick={(event) => handleDomainClick(event, domain)}
+    //             sx={{ fontSize: '14px', fontWeight: 'bold', display: 'flex', justifyContent: 'space-between' }}
+    //         >
+    //             {domain.name}
+    //             {domain.child?.length > 0 && <ArrowRightIcon />}
+    //             {domain.child?.length > 0 && (
+    //                 <Popover
+    //                     open={Boolean(anchorElSubMenu) && subDomains === domain.child}
+    //                     anchorEl={anchorElSubMenu}
+    //                     onClose={handleCloseSubMenu}
+    //                     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+    //                     transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+    //                     PaperProps={{
+    //                         sx: {
+    //                             mt: 1,
+    //                             p: 0,
+    //                         },
+    //                     }}
+    //                 >
+    //                     {renderDomainMenu(domain.child, handleDomainClick)}
+    //                 </Popover>
+    //             )}
+    //         </MenuItem>
+    //     ));
+    // };
 
-    const handleSubdomainClick = (event, subdomain) => {
-        setSubDomains([subdomain]);
-        setAnchorElSubMenu(event.currentTarget);
-    };
+    // const handleSubdomainClick = (event, subdomain) => {
+    //     setSubDomains([subdomain]);
+    //     setAnchorElSubMenu(event.currentTarget);
+    // };
 
     const handleCartClick = () => {
         navigate("/cart-courses")
-    }
-
-    //   console.log('domainData', domainData);
-
+    };
 
     return (
         <div style={{ paddingLeft: isMobile ? '6rem' : '0rem', paddingRight: isMobile ? '6rem' : '0rem', paddingTop: '0.5rem', paddingBottom: '0.5rem', background: '#fff' }}>
@@ -504,7 +550,7 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                             {/* <img alt='' style={{ transform: anchorAbout ? 'rotate(180deg)' : 'rotate(0deg)' }} src={PolygonDown} /> */}
                         </Typography>
                         <Typography
-                            // onClick={(e) => handleNavBarClick(e, 'Home')}
+                            onClick={handleClickAboutUs}
                             color='Black'
                             display={'flex'}
                             justifyContent={'start'}
@@ -522,7 +568,7 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                         {
                             domainData?.length > 0 && domainData?.map((item, i) => {
                                 return <Typography
-                                    // onClick={handleClickOnlineCourse}
+                                    onClick={(e) => handleNavBarClick(e, item?.name)}
                                     color='Black'
                                     display={'flex'}
                                     justifyContent={'start'}
@@ -541,7 +587,7 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                         }
 
                         <Typography
-                            // onClick={handleNavigateAboutUs}
+                            onClick={handleScroll}
                             color='Black'
                             display={'flex'}
                             justifyContent={'start'}
@@ -643,12 +689,21 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                <MenuItem sx={{ fontSize: '12px' }} onClick={(e) => handleNavigateAboutUs(e)}>
-                    About Us
-                </MenuItem>
-                <MenuItem sx={{ fontSize: '12px' }} onClick={(e) => handleNavigateOurTeam(e)}>
-                    Our Team
-                </MenuItem>
+                {
+                    tagsLists?.length > 0 && tagsLists?.map((item, i) => {
+                        return (
+                            <MenuItem sx={{ fontSize: '14px' }}
+                                key={i}
+                                onClick={(e) => {
+                                    navigate('/Explore-all', { state: item });
+                                    handleOpenNavMen2Close()
+                                }}
+                            >
+                                {item?.tag}
+                            </MenuItem>
+                        )
+                    })
+                }
             </Menu>
             <Menu
                 anchorEl={anchorEScholarship}
@@ -732,7 +787,7 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                 ))} */}
                 <DomainMenu domainData={domainData} courses={courses} setAnchorElOnlineCourse={setAnchorElOnlineCourse} />
             </Menu>
-            <Popover
+            {/* <Popover
                 open={Boolean(anchorElSubMenu)}
                 anchorEl={anchorElSubMenu}
                 onClose={handleCloseSubMenu}
@@ -760,7 +815,7 @@ const NavBarTwo = forwardRef(({ ref, downloadAppRef }) => {
                         {subItem.child?.length ? <ArrowRightIcon /> : null}
                     </MenuItem>
                 ))}
-            </Popover>
+            </Popover> */}
         </div>
     )
 })

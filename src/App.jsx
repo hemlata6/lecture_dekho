@@ -65,7 +65,9 @@ function App() {
         <Route path='/terms-conditions' element={<TermsAndConditions />} />
         <Route path='*' element={<Navigate to="/" />} />
       </Routes>
-      <Footer />
+      <div ref={downloadAppRef}>
+        <Footer />
+      </div>
       {/* <a href="tel:9589613810">
         <button class="btn-floating phone">
           <img src="https://i.imgur.com/FZuns9L.png" alt="Phone" />
